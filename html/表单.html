@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表单</title>
+    <script src="../vue.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <form>
+            <div>
+                <span>姓名：</span>
+                <input type="text" v-model="user.uname" />
+            </div>
+            <div>
+                <span>性别：</span>
+                <input type="radio" id="man" v-model="user.sex" value="1" />
+                <lable for="man">男</lable>
+                <input type="radio" id="woman" v-model="user.sex" value="2" />
+                <lable for="woman">女</lable>
+            </div>
+            <div>
+                <span>爱好：</span>
+                <input type="checkbox" id="ball" value="1" v-model="user.hobby" />
+                <lable for="ball">篮球</lable>
+                <input type="checkbox" id="sign" value="2" v-model="user.hobby" />
+                <lable for="sign">唱歌</lable>
+                <input type="checkbox" id="code" value="3" v-model="user.hobby" />
+                <lable for="code">编程</lable>
+            </div>
+            <div>
+                <span>职业：</span>
+                <!-- <select v-model="user.caneer" multiple="true"> -->
+                <select v-model="user.caneer">
+                <option value="0">请选择职业...</option>
+                <option value="1">ui开发</option>
+                <option value="2">后端开发</option>
+                <option value="3">测试工程师</option>
+                </select>
+            </div>
+            <div>
+                <span>个人简介：</span>
+                <textarea v-model="user.introduce"></textarea>
+            </div>
+            <div>
+                <!-- <input type="submit" value="提交" @click="handle" /> -->
+                <input type="submit" value="提交" @click.prevent="handle" />
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+<script>
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            user: {
+                uname: 'test',
+                sex: '1',
+                hobby: ['1'],
+                introduce: 'hi',
+                caneer: '1'
+                    // caneer: []
+
+            }
+
+        },
+        methods: {
+            handle: function(event) {
+                console.log(event)
+                console.log(this.user);
+            }
+
+        }
+    })
+</script>
+
+</html>
