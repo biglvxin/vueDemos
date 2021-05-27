@@ -20,6 +20,13 @@
                 <input type="text" v-model="user.uname" />
             </div>
             <div>
+                <span>年龄：</span>
+                <input type="text" v-model.number="user.age" />
+                <input type="text" v-model.tirm="user.info" />
+                <input type="text" v-model.lazy="msg" />
+                <div>{{msg}}</div>
+            </div>
+            <div>
                 <span>性别：</span>
                 <input type="radio" id="man" v-model="user.sex" value="1" />
                 <lable for="man">男</lable>
@@ -64,20 +71,26 @@
         el: '#app',
         data: {
             user: {
+                age: 12,
                 uname: 'test',
                 sex: '1',
                 hobby: ['1'],
                 introduce: 'hi',
-                caneer: '1'
+                caneer: '1',
+                info: ''
                     // caneer: []
 
-            }
+            },
+            msg: ''
 
         },
         methods: {
             handle: function(event) {
-                console.log(event)
                 console.log(this.user);
+                console.log(this.user.age + 12);
+
+                console.log(this.user.info.length);
+
             }
 
         }
