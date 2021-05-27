@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tab Demo</title>
+    <script src="../vue.js"></script>
+    <style>
+        .tab ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0px;
+        }
+        
+        .tab ul li {
+            display: inline-block;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            padding: 10px 16px;
+            border: 1px solid black;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .tab div.current {
+            display: block;
+        }
+        
+        .tab div {
+            display: none;
+            width: 300px;
+            height: 300px;
+        }
+        
+        .active {
+            background-color: #8800ef;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="tab">
+            <ul>
+                <!-- <li class="active">apple</li>
+                <li>orange</li>
+                <li>lemon</li> -->
+                <li :key="item.id" v-for="(item, index) in list" v-bind:class="currentIndex === index?'active': ''" @click="change(index)">{{item.title}}</li>
+            </ul>
+            <!-- <div class="current">
+            <img src="../image/apple.png">
+            </div>
+            <div>
+                <img src="../image/orange.png">
+            </div>
+            <div>
+                <img src="../image/lemon.png">
+            </div> -->
+            <div :key="item.id" v-for="(item, index) in list" :class="currentIndex === index?'current': ''">
+                <img v-bind:src="item.path">
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+<script>
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            list: [{
+                id: 0,
+                title: 'apple',
+                path: '../image/apple.png'
+            }, {
+                id: 1,
+                title: 'orange',
+                path: '../image/orange.png'
+            }, {
+                id: 2,
+                title: 'lemon',
+                path: '../image/lemon.png'
+            }],
+            currentIndex: 0
+        },
+        methods: {
+            change: function(index) {
+                this.currentIndex = index;
+            }
+
+        }
+    })
+</script>
+
+</html>
