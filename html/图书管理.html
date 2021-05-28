@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图书管理</title>
+    <script src="../vue.js"></script>
+    <style>
+        .grid {
+            margin: auto;
+            width: 500px;
+            text-align: center;
+        }
+        
+        .grid table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .grid th,
+        td {
+            padding: 10;
+            border: 1px dashed orange;
+            height: 35px;
+            line-height: 35px;
+        }
+        
+        .grid th,
+        .book div {
+            background-color: orange;
+        }
+        
+        .book div {
+            padding: 10px 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="grid">
+            <div class="book">
+                <h1>图书管理</h1>
+                <div>
+                    <label for="id">编号:</label>
+                    <input type="text" id="id" v-model="id">
+                    <label for="name">名称:</label>
+                    <input type="text" id="name" v-model="name">
+                    <button>添加</button>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <th>编号</th>
+                    <th>名称</th>
+                    <th>时间</th>
+                    <th>操作</th>
+                </thead>
+                <tbody>
+                    <tr :key="item.id" v-for="(item, index) in books">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.date}}</td>
+                        <td>
+                            <a href="#" @click.prevent>添加</a>
+                            <span>|</span>
+                            <a href="#" @click.prevent> 删除</a>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td>2</td>
+                        <td>水浒</td>
+                        <td></td>
+                        <td>
+                            <a>添加 | </a>
+                            <a> 删除 </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>红楼</td>
+                        <td></td>
+                        <td>
+                            <a>添加 | </a>
+                            <a> 删除 </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>西游</td>
+                        <td></td>
+                        <td>
+                            <a>添加 | </a>
+                            <a> 删除 </a>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+<script>
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            id: '',
+            name: '',
+            books: [{
+                id: 1,
+                name: '三国',
+                date: ''
+            }, {
+                id: 2,
+                name: '水浒',
+                date: ''
+            }, {
+                id: 3,
+                name: '红楼',
+                date: ''
+            }, {
+                id: 4,
+                name: '西游',
+                date: ''
+            }]
+
+        },
+        methods: {
+
+        }
+    });
+</script>
+
+</html>
