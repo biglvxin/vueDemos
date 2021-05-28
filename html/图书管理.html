@@ -45,7 +45,7 @@
                 <h1>图书管理</h1>
                 <div>
                     <label for="id">编号:</label>
-                    <input type="text" id="id" v-model="id">
+                    <input type="text" id="id" v-model="id" :disabled="isIdDisabled">
                     <label for="name">名称:</label>
                     <input type="text" id="name" v-model="name">
                     <button @click="addHandle()">添加</button>
@@ -108,6 +108,7 @@
         data: {
             id: '',
             name: '',
+            isIdDisabled: false,
             books: [{
                 id: 1,
                 name: '三国',
@@ -129,20 +130,32 @@
         },
         methods: {
             addHandle: function() {
-                //添加
-                let bookItem = {};
-                bookItem.id = this.id;
-                bookItem.name = this.name;
-                bookItem.date = '';
-                this.books.push(bookItem);
-                //清空表单
-                this.id = '';
-                this.name = '';
+                if (this.isIdDisabled) {
+                    //edit
+                    this.books[this.id].name = this.name;
+                    this.isIdDisabled = false;
+                    //清空表单
+                    this.id = '';
+                    this.name = '';
+                } else {
+                    //add
+                    //添加
+                    let bookItem = {};
+                    bookItem.id = this.id;
+                    bookItem.name = this.name;
+                    bookItem.date = '';
+                    this.books.push(bookItem);
+                    //清空表单
+                    this.id = '';
+                    this.name = '';
+                }
+
 
             },
             editHandle: function(index) {
                 this.id = this.books[index].id;
                 this.name = this.books[index].name;
+                this.isIdDisabled = true;
             }
 
         }
