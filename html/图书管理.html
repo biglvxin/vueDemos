@@ -48,7 +48,7 @@
                     <input type="text" id="id" v-model="id">
                     <label for="name">名称:</label>
                     <input type="text" id="name" v-model="name">
-                    <button>添加</button>
+                    <button @click="addHandle()">添加</button>
                 </div>
             </div>
             <table>
@@ -64,7 +64,7 @@
                         <td>{{item.name}}</td>
                         <td>{{item.date}}</td>
                         <td>
-                            <a href="#" @click.prevent>添加</a>
+                            <a href="#" @click.prevent="editHandle(index)"> 编辑</a>
                             <span>|</span>
                             <a href="#" @click.prevent> 删除</a>
                         </td>
@@ -128,6 +128,22 @@
 
         },
         methods: {
+            addHandle: function() {
+                //添加
+                let bookItem = {};
+                bookItem.id = this.id;
+                bookItem.name = this.name;
+                bookItem.date = '';
+                this.books.push(bookItem);
+                //清空表单
+                this.id = '';
+                this.name = '';
+
+            },
+            editHandle: function(index) {
+                this.id = this.books[index].id;
+                this.name = this.books[index].name;
+            }
 
         }
     });
