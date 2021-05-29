@@ -47,20 +47,10 @@
     <div id="app">
         <div class="tab">
             <ul>
-                <!-- <li class="active">apple</li>
-                <li>orange</li>
-                <li>lemon</li> -->
+
                 <li :key="item.id" v-for="(item, index) in list" v-bind:class="currentIndex === index?'active': ''" @click="change(index)">{{item.title}}</li>
             </ul>
-            <!-- <div class="current">
-            <img src="../image/apple.png">
-            </div>
-            <div>
-                <img src="../image/orange.png">
-            </div>
-            <div>
-                <img src="../image/lemon.png">
-            </div> -->
+
             <div :key="item.id" v-for="(item, index) in list" :class="currentIndex === index?'current': ''">
                 <img v-bind:src="item.path">
             </div>
