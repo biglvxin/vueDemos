@@ -170,71 +170,18 @@
     </div>
     <script>
         let CartTitle = {
+            props: ['unam'],
             template: `
-            <div class="title">商品列表</div>
+            <div class="title">{{unam}}的商品列表</div>
             `,
         }
         let CartList = {
+            props: ['list'],
             template: `
              <div>
-                    <div class="item">
-                        <img src="../image/product/a.png">
-                        <div class="name"></div>
-                        <div class="change">
-                            <a href="">-</a>
-                            <input type="text" class="num">
-                            <a href="">+</a>
-                        </div>
-                        <div class="delete">x</div>
-                    </div>
-
-                    <div class="item">
-                        <img src="../image/product/b.png">
-                        <div class="name"></div>
-                        <div class="change">
-                            <a href="">-</a>
-                            <input type="text" class="num">
-                            <a href="">+</a>
-                        </div>
-                        <div class="delete">x</div>
-                    </div>
-
-                    <div class="item">
-                        <img src="../image/product/c.png">
-                        <div class="name"></div>
-                        <div class="change">
-                            <a href="">-</a>
-                            <input type="text" class="num">
-                            <a href="">+</a>
-                        </div>
-                        <div class="delete">x</div>
-                    </div>
-
-                    <div class="item">
-                        <img src="../image/product/d.png">
-                        <div class="name"></div>
-                        <div class="change">
-                            <a href="">-</a>
-                            <input type="text" class="num">
-                            <a href="">+</a>
-                        </div>
-                        <div class="delete">x</div>
-                    </div>
-
-                    <div class="item">
-                        <img src="../image/product/e.png">
-                        <div class="name"></div>
-                        <div class="change">
-                            <a href="">-</a>
-                            <input type="text" class="num">
-                            <a href="">+</a>
-                        </div>
-                        <div class="delete">x</div>
-                    </div>
-
-                    <div class="item">
-                        <img src="../image/product/f.png">
-                        <div class="name"></div>
+                    <div class="item" :key="item.id" v-for="(item, index) in list">
+                        <img :src="item.img">
+                        <div class="name">{{item.name}}</div>
                         <div class="change">
                             <a href="">-</a>
                             <input type="text" class="num">
@@ -247,19 +194,78 @@
             `,
         }
         let CartTotal = {
+            props: ['list'],
             template: `
              <div class="total">
-                    <span>总价： 1234</span>
+                    <span>总价：{{total}}</span>
                     <button>结算</button>
             </div>
             `,
+            computed: {
+                total: function() {
+                    console.log(this.list);
+                    //计算总价
+                    let sum = 0;
+                    this.list.forEach(item => {
+                        sum += item.price * item.num;
+                    });
+                    return sum;
+                }
+            }
         }
         Vue.component('my-cart', {
+            data: function() {
+                return {
+                    unam: 'lvxin',
+                    list: [{
+                        id: 1,
+                        name: '苹果',
+                        price: 3,
+                        num: 1,
+                        img: '../image/product/a.png'
+                    }, {
+                        id: 2,
+                        name: '柠檬',
+                        price: 8,
+                        num: 1,
+                        img: '../image/product/b.png'
+
+                    }, {
+                        id: 3,
+                        name: '橘子',
+                        price: 3,
+                        num: 1,
+                        img: '../image/product/c.png'
+
+                    }, {
+                        id: 4,
+                        name: '葡萄',
+                        price: 10,
+                        num: 1,
+                        img: '../image/product/d.png'
+
+                    }, {
+                        id: 5,
+                        name: '西瓜',
+                        price: 20,
+                        num: 1,
+                        img: '../image/product/e.png'
+
+                    }, {
+                        id: 6,
+                        name: '香蕉',
+                        price: 5,
+                        num: 1,
+                        img: '../image/product/f.png'
+
+                    }, ]
+                }
+            },
             template: `
                 <div class="cart">
-                    <cart-title></cart-title>
-                    <cart-list></cart-list>
-                    <cart-total></cart-total>
+                    <cart-title :unam="unam"></cart-title>
+                    <cart-list :list="list"></cart-list>
+                    <cart-total :list="list"></cart-total>
                 </div>
             `,
             components: {
