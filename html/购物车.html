@@ -183,15 +183,40 @@
                         <img :src="item.img">
                         <div class="name">{{item.name}}</div>
                         <div class="change">
-                            <a href="">-</a>
-                            <input type="text" class="num">
-                            <a href="">+</a>
+                            <a href="" @click.prevent="sub(item.id)">-</a>
+                            <input type="text" class="num" :value="item.num" @blur="changeNum(item.id, $event)">
+                            <a href="" @click.prevent="add(item.id)">+</a>
                         </div>
-                        <div class="delete">x</div>
+                        <div class="delete" @click="deleteCart(item.id)">x</div>
                     </div>
 
                 </div>
             `,
+            methods: {
+                deleteCart: function(id) {
+                    //传给父类
+                    this.$emit('delete-cart', id);
+                },
+                changeNum: function(id, event) {
+                    this.$emit('change-num', {
+                        id: id,
+                        type: 'change',
+                        num: event.target.value
+                    });
+                },
+                sub: function(id) {
+                    this.$emit('change-num', {
+                        id: id,
+                        type: 'sub'
+                    })
+                },
+                add: function(id) {
+                    this.$emit('change-num', {
+                        id: id,
+                        type: 'add'
+                    })
+                }
+            }
         }
         let CartTotal = {
             props: ['list'],
@@ -264,7 +289,7 @@
             template: `
                 <div class="cart">
                     <cart-title :unam="unam"></cart-title>
-                    <cart-list :list="list"></cart-list>
+                    <cart-list :list="list" @delete-cart="deleteCart($event)" @change-num="changeNum($event)"></cart-list>
                     <cart-total :list="list"></cart-total>
                 </div>
             `,
@@ -272,6 +297,45 @@
                 'cart-title': CartTitle,
                 'cart-list': CartList,
                 'cart-total': CartTotal,
+            },
+            methods: {
+                deleteCart: function(id) {
+                    console.log(id);
+                    // 查找到id
+                    let index = this.list.findIndex(item => {
+                        return item.id === id;
+                    });
+                    // delete id
+                    this.list.splice(index, 1);
+
+                },
+                changeNum: function(value) {
+                    console.log(value);
+                    // change, sub, add 输入域变更，减号变更，加号变更
+                    if (value.type === 'change') {
+                        this.list.some(item => {
+                            if (item.id === value.id) {
+                                item.num = value.num;
+                                return true;
+                            }
+                        });
+                    } else if (value.type === 'sub') {
+                        this.list.some(item => {
+                            if (item.id === value.id) {
+                                item.num -= 1
+                                return true;
+                            }
+                        });
+                    } else if (value.type === 'add') {
+                        this.list.some(item => {
+                            if (item.id === value.id) {
+                                item.num += 1
+                                return true;
+                            }
+                        });
+                    }
+
+                }
             }
 
         })

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图书管理</title>
+    <script src="../src/js/vue.js"></script>
+    <script src="../src/js/axios.js"></script>
+    <style>
+        .grid {
+            margin: auto;
+            width: 500px;
+            text-align: center;
+        }
+        
+        .grid table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .grid th,
+        td {
+            padding: 10;
+            border: 1px dashed orange;
+            height: 35px;
+            line-height: 35px;
+        }
+        
+        .grid th,
+        .book div {
+            background-color: orange;
+            border-top: 1px solid;
+        }
+        
+        .book div {
+            padding: 10px 0px;
+        }
+        
+        .grid .total {
+            height: 30px;
+            line-height: 30px;
+            background-color: orange;
+            border-top: 1px solid
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="grid">
+            <div class="book">
+                <h1>图书管理</h1>
+                <div>
+                    <label for="id">编号:</label>
+                    <input type="text" id="id" v-model="id" :disabled="true" v-focus>
+                    <label for="name">名称:</label>
+                    <input type="text" id="name" v-model="name">
+                    <button @click="addHandle()" :disabled="isAllowAdd">添加</button>
+                </div>
+            </div>
+            <div class="total">
+                <span>图书总数:</span>
+                <span>{{total}}</span>
+            </div>
+            <table>
+                <thead>
+                    <th>编号</th>
+                    <th>名称</th>
+                    <th>时间</th>
+                    <th>操作</th>
+                </thead>
+                <tbody>
+                    <tr :key="item.id" v-for="(item, index) in books">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.date | format('yyyy-MM-dd hh:mm:ss')}}</td>
+                        <td>
+                            <a href="#" @click.prevent="editHandle(index)"> 编辑</a>
+                            <span>|</span>
+                            <a href="#" @click.prevent="deleteHandle(index)"> 删除</a>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td>2</td>
+                        <td>水浒</td>
+                        <td></td>
+                        <td>
+                            <a>添加 | </a>
+                            <a> 删除 </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>红楼</td>
+                        <td></td>
+                        <td>
+                            <a>添加 | </a>
+                            <a> 删除 </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>西游</td>
+                        <td></td>
+                        <td>
+                            <a>添加 | </a>
+                            <a> 删除 </a>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+<script>
+    axios.defaults.baseURL = "http://localhost:3000/";
+    axios.interceptors.response.use(function(ret) {
+        return ret.data;
+    }, function(error) {
+        console.log(error);
+    });
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            id: '',
+            name: '',
+            isIdDisabled: false,
+            isAllowAdd: false,
+            books: [],
+            // books: [{
+            //     id: 1,
+            //     name: '三国',
+            //     date: 2525609975000
+            // }, {
+            //     id: 2,
+            //     name: '水浒',
+            //     date: 2525609975000
+            // }, {
+            //     id: 3,
+            //     name: '红楼',
+            //     date: 2525609975000
+            // }, {
+            //     id: 4,
+            //     name: '西游',
+            //     date: 2525609975000
+            // }]
+
+        },
+        filters: {
+            format: function(date, format) {
+                console.log(date);
+
+                function dateFormat(date, format) {
+                    if (typeof date === "string") {
+                        var mts = date.match(/(\/Date\((\d+)\)\/)/);
+                        if (mts && mts.length >= 3) {
+                            date = parseInt(mts[2]);
+                        }
+                    }
+                    date = new Date(date);
+                    if (!date || date.toUTCString() == "Invalid Date") {
+                        return "";
+                    }
+                    var map = {
+                        "M": date.getMonth() + 1, //月份 
+                        "d": date.getDate(), //日 
+                        "h": date.getHours(), //小时 
+                        "m": date.getMinutes(), //分 
+                        "s": date.getSeconds(), //秒 
+                        "q": Math.floor((date.getMonth() + 3) / 3), //季度 
+                        "S": date.getMilliseconds() //毫秒 
+                    };
+
+                    format = format.replace(/([yMdhmsqS])+/g, function(all, t) {
+                        var v = map[t];
+                        if (v !== undefined) {
+                            if (all.length > 1) {
+                                v = '0' + v;
+                                v = v.substr(v.length - 2);
+                            }
+                            return v;
+                        } else if (t === 'y') {
+                            return (date.getFullYear() + '').substr(4 - all.length);
+                        }
+                        return all;
+                    });
+                    return format;
+                }
+                return dateFormat(date, format);
+            }
+        },
+        directives: {
+            focus: {
+                inserted: function(el) {
+                    el.focus();
+                }
+            }
+        },
+        computed: {
+            total: function() {
+                return this.books.length;
+            }
+        },
+        watch: {
+            name: async function(value) {
+                // let flag = this.books.some(function(item) {
+                //     return item.name === value;
+                // });
+                // this.isAllowAdd = flag ? true : false;
+                let ret = await axios.get('books/book/' + this.name);
+                if (ret.status === 1) {
+                    this.isAllowAdd = true;
+                } else {
+                    this.isAllowAdd = false;
+                }
+
+            }
+        },
+        mounted: function() {
+            //初始化后通过接口调用数据
+            // let data = [{
+            //     id: 1,
+            //     name: '三国',
+            //     date: 2525609975000
+            // }, {
+            //     id: 2,
+            //     name: '水浒',
+            //     date: 2525609975000
+            // }, {
+            //     id: 3,
+            //     name: '红楼',
+            //     date: 2525609975000
+            // }, {
+            //     id: 4,
+            //     name: '西游',
+            //     date: 2525609975000
+            // }];
+            // this.books = data;
+
+            // axios.get('books').then((data) => {
+            //     this.books = data.data;
+            // });
+            this.loadBookList();
+
+            console.log(this.books);
+        },
+        methods: {
+            addHandle: async function() {
+                if (this.isIdDisabled) {
+                    // //edit
+                    // this.books[this.id].name = this.name;
+                    // this.isIdDisabled = false;
+                    // //清空表单
+                    // this.id = '';
+                    // this.name = '';
+                    let ret = await axios.put('books/' + this.id, {
+                        name: this.name
+                    });
+                    if (ret.status === 200) {
+                        this.loadBookList();
+                    }
+                    this.isIdDisabled = false;
+
+                } else {
+                    // //add
+                    // //添加
+                    // let bookItem = {};
+                    // bookItem.id = this.id;
+                    // bookItem.name = this.name;
+                    // bookItem.date = new Date();
+                    // this.books.push(bookItem);
+                    // //清空表单
+                    // this.id = '';
+                    // this.name = '';
+                    let ret = await axios.post('books', {
+                        name: this.name,
+                    });
+                    if (ret.status === 200) {
+                        this.loadBookList();
+                    }
+                }
+
+
+            },
+            editHandle: async function(index) {
+                // this.id = this.books[index].id;
+                // this.name = this.books[index].name;
+                // this.isIdDisabled = true;
+                let ret = await axios.get('books/' + this.books[index].id);
+                this.id = ret.id;
+                this.name = ret.name;
+                this.isIdDisabled = true;
+
+            },
+            deleteHandle: async function(index) {
+                // this.books.splice(index, 1);
+                let ret = await axios.delete('books/' + this.books[index].id);
+                if (ret.status === 200) {
+                    this.loadBookList();
+                }
+            },
+            // 接口获取books的列表
+            loadBookList: async function() {
+                // let ret = await axios.get('books');
+                // this.books = ret.data;
+                this.books = await axios.get('books');
+            },
+
+        }
+    });
+</script>
+
+</html>

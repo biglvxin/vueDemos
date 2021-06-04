@@ -1,0 +1,19 @@
+{
+  "name": "myapitest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "vue.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/biglvxin/vueDemos.git"
+  },
+  "author": "lvxin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/biglvxin/vueDemos/issues"
+  },
+  "homepage": "https://github.com/biglvxin/vueDemos#readme"
+}
